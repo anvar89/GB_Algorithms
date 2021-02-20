@@ -1,22 +1,26 @@
 ﻿using System;
 
-namespace Lesson1
+namespace Task1
 {
-    class Program
+    public static class Program
     {
-        static int testCaseNumber;
-
         static void Main(string[] args)
         {
+
             Console.WriteLine("Задача 1. Требуется реализовать на C# функцию согласно блок-схеме. Блок-схема описывает алгоритм проверки, простое число или нет.");
 
-            TestPrimeNumberCheck(2, true);
-            TestPrimeNumberCheck(3, true);
-            TestPrimeNumberCheck(101, true);
-            TestPrimeNumberCheck(10, false);
-            TestPrimeNumberCheck(-20, false);
-            TestPrimeNumberCheck(1, false);
-            TestPrimeNumberCheck(0, false);
+            string prime = "Простое";
+            string notPrime = "Не простое";
+
+            TestFunction<string, int>(2, prime, PrimeNumberCheck);
+            TestFunction<string, int>(3, prime, PrimeNumberCheck);
+            TestFunction<string, int>(101, prime, PrimeNumberCheck);
+            TestFunction<string, int>(30, notPrime, PrimeNumberCheck);
+            TestFunction<string, int>(-30, notPrime, PrimeNumberCheck);
+            TestFunction<string, int>(1, notPrime, PrimeNumberCheck);
+            TestFunction<string, int>(0, notPrime, PrimeNumberCheck);
+
+            Console.ReadKey();
         }
 
         static string PrimeNumberCheck(int number)
@@ -34,16 +38,18 @@ namespace Lesson1
             return d == 0? "Простое" : "Не простое";
         }
 
-        static void TestPrimeNumberCheck(int testNumber, bool expectedResult)
+        // Метод для тестирования
+        public static void TestFunction<T1, T2>(T2 input, T1 expectedResult, func<T1, T2> testedFunc)
         {
-            string expectedOutput = expectedResult ? "Простое" : "Не простое";
-            string output = PrimeNumberCheck(testNumber);
-
-            Console.WriteLine($"TestCase #{++testCaseNumber}");
-            Console.WriteLine($"Подаём на вход: {testNumber}. Ожидаемый результат: {expectedOutput}");
-            Console.WriteLine($"Результат вашей функции: {output}");
-            Console.WriteLine(expectedOutput == output? "Тест пройден" : "Тест не пройден");
+            T1 result = testedFunc(input);
+            
+            Console.WriteLine($"Подаём на вход: {input}. Ожидаемый результат: {expectedResult}");
+            Console.WriteLine($"Результат вашей функции: {result}");
+            Console.WriteLine(result.Equals(expectedResult) ? "Тест пройден" : "Тест не пройден");
             Console.WriteLine();
         }
+
+
+        public delegate T1 func<T1, T2>(T2 arg);
     }
 }
