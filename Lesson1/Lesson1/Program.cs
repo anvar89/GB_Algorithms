@@ -15,9 +15,11 @@ namespace Lesson1
             list.AddNode(3);
             list.AddNode(4);
             list.AddNode(5);
-            list.AddNode(5);
-            list.AddNodeAfter(list.FindNode(5), 400);
+            list.AddNode(6);
+            //list.AddNodeAfter(list.FindNode(5), 400);
+            Console.WriteLine(list);
 
+            list.RemoveNode(5);
             Console.WriteLine(list);
         }
 
@@ -52,7 +54,7 @@ namespace Lesson1
         public void AddNode(int value)
         {
             Node newNode = new Node() { Value = value };
-            if (head == null) 
+            if (head == null)
                 head = newNode;
             else
             {
@@ -65,7 +67,7 @@ namespace Lesson1
                 node.NextNode = newNode;
                 newNode.PrevNode = node;
 
-                tail = newNode; 
+                tail = newNode;
             }
             count++;
         }
@@ -115,26 +117,45 @@ namespace Lesson1
         }
 
         public int GetCount() => count;
-       
+
 
         public void RemoveNode(int index)
         {
-            if (index >= 0 && index <= count)
+            if (index >= 0 && index < count)
             {
+                int i = 0;
                 Node node = head;
-                for (int i = 0; i <= index; i++)
-                {
-                    if (node.NextNode != null)
-                    {
 
+                do
+                {
+                    if (index == i)
+                    {
+                        RemoveNode(node);
+                        break;
+                    }
+                    else
+                    {
+                        i++;
+                        node = node.NextNode;
                     }
                 }
+                while (node != tail);
             }
         }
 
-        void ILinkedList.RemoveNode(Node node)
+        public void RemoveNode(Node node)
         {
-            throw new NotImplementedException();
+            if (node == tail)
+            {
+                tail = node.PrevNode;
+                tail.NextNode = null;
+            }
+            else
+            {
+                node.PrevNode.NextNode = node.NextNode;
+                node.NextNode.PrevNode = node.PrevNode;
+            }
+            count--;
         }
 
         public override string ToString()
@@ -142,18 +163,45 @@ namespace Lesson1
             if (head != null)
             {
                 Node node = head;
-                string result ="Nodes: ";
-                while(true)
+                string result = "Nodes: ";
+                do
                 {
                     result += $"{node.Value} ";
-
-                    if (node.NextNode == null) break;
                     node = node.NextNode;
                 }
+                while (node != tail);
                 return result;
             }
             else return "Пустой список";
         }
 
+        public Node this[int index]
+        {
+            get
+            {
+                if (index >= 0 && index < count)
+                {
+                    int i = 0;
+                    Node node = head;
+
+                    while(true)
+                    {
+                        if (i >= count || node == null) break;
+
+                        if (index == i) return node;
+                        else
+                        {
+                            i++;
+                            node = node.NextNode;
+                        }
+
+
+                    }
+                    
+                }
+
+                return null;
+            }
+        }
     }
 }
