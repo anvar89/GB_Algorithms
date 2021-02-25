@@ -6,24 +6,39 @@ namespace Lesson1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Задача 2. Требуется реализовать класс двусвязного списка и операции вставки, удаления и поиска элемента в нём в соответствии с интерфейсом.");
+            Console.WriteLine("Задача 1. Требуется реализовать класс двусвязного списка и операции вставки, удаления и поиска элемента в нём в соответствии с интерфейсом.");
 
             NodeList list = new NodeList();
 
-            list.AddNode(1);
-            list.AddNode(2);
-            list.AddNode(3);
-            list.AddNode(4);
-            list.AddNode(5);
-            list.AddNode(6);
-            //list.AddNodeAfter(list.FindNode(5), 400);
-            Console.WriteLine(list);
+            
+            for (int i = 100; i < 105; i++)
+            {
+                list.AddNode(i);
+            }
+            testNodeList(list.ToString(), "100 101 102 103 104", "Тест: проверка метода добавления элемента в конец");
+
+            list.AddNodeAfter(list.FindNode(102), 1000);
+            testNodeList(list.ToString(), "100 101 102 1000 103 104", "Тест: проверка метода добавления элемента после указанного элемента");
+
+            testNodeList(list.FindNode(1000).Value.ToString(), "1000", "Тест: поиска метода по значению");
 
             list.RemoveNode(5);
-            Console.WriteLine(list);
+            testNodeList(list.ToString(), "100 101 102 1000 103", "Тест: удаление элемента по индексу");
+
+            list.RemoveNode(list.FindNode(1000));
+            testNodeList(list.ToString(), "100 101 102 103", "Тест: удаление указанного элемента");
+
+            Console.ReadKey();
         }
 
-
+        static void testNodeList(string output, string expectedOutput, string testText)
+        {
+            Console.WriteLine(testText);
+            Console.WriteLine($"Ожидаемый вывод: {expectedOutput}");
+            Console.WriteLine($"Реальный вывод: {output}");
+            Console.WriteLine(output == expectedOutput ? "Тест пройден" : "Тест не пройден");
+            Console.WriteLine();
+        }
     }
 
     public class Node
@@ -58,16 +73,30 @@ namespace Lesson1
                 head = newNode;
             else
             {
-                Node node = head;
-                while (node.NextNode != null)
+                //Node node = head;
+                //while (node.NextNode != null)
+                //{
+                //    node = node.NextNode;
+                //}
+
+                //node.NextNode = newNode;
+                //newNode.PrevNode = node;
+                //tail = newNode;
+
+                if (tail != null)
                 {
-                    node = node.NextNode;
+                    tail.NextNode = newNode;
+                    newNode.PrevNode = tail;
+                    tail = newNode;
                 }
+                else
+                {
+                    tail = newNode;
+                    tail.PrevNode = head;
+                    head.NextNode = tail;
 
-                node.NextNode = newNode;
-                newNode.PrevNode = node;
-
-                tail = newNode;
+                }
+                
             }
             count++;
         }
@@ -139,7 +168,7 @@ namespace Lesson1
                         node = node.NextNode;
                     }
                 }
-                while (node != tail);
+                while (node != null);
             }
         }
 
@@ -163,45 +192,20 @@ namespace Lesson1
             if (head != null)
             {
                 Node node = head;
-                string result = "Nodes: ";
-                do
+                string result = "";
+                while(true)
                 {
-                    result += $"{node.Value} ";
-                    node = node.NextNode;
+                    if (node != null)
+                    {
+                        result += $"{node.Value} ";
+                        node = node.NextNode;
+                    }
+                    else return result.Trim();
                 }
-                while (node != tail);
-                return result;
             }
             else return "Пустой список";
         }
-
-        public Node this[int index]
-        {
-            get
-            {
-                if (index >= 0 && index < count)
-                {
-                    int i = 0;
-                    Node node = head;
-
-                    while(true)
-                    {
-                        if (i >= count || node == null) break;
-
-                        if (index == i) return node;
-                        else
-                        {
-                            i++;
-                            node = node.NextNode;
-                        }
-
-
-                    }
-                    
-                }
-
-                return null;
-            }
-        }
     }
+
+    
 }
