@@ -1,207 +1,224 @@
-﻿using System;
+﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
+using System;
+using System.Collections.Generic;
 
 namespace Lesson1
 {
+    //class Program
+    //{
+    //    public static PointClass<double>[,] pointsClassD;
+    //    public static PointStruct<double>[,] pointsStructD;
+    //    public static PointClass<float>[,] pointsClassF;
+    //    public static PointStruct<float>[,] pointsStructF;
+
+    //    static void Main(string[] args)
+    //    {
+    //        Console.WriteLine("Задача: Напишите тесты производительности для расчёта дистанции между точками с помощью BenchmarkDotNet. " +
+    //            "Рекомендуем сгенерировать заранее массив данных, чтобы расчёт шёл с различными значениями, но сам код генерации должен ," +
+    //            "происходить вне участка кода, время которого будет тестироваться.");
+    //        // Генерирование массивов для теста
+    //        int count = 1000;
+    //        pointsClassD = new PointClass<double>[count, 2];
+    //        pointsStructD = new PointStruct<double>[count, 2];
+    //        pointsClassF = new PointClass<float>[count, 2];
+    //        pointsStructF = new PointStruct<float>[count, 2];
+
+    //        Random rnd = new Random();
+
+    //        for (int i = 0; i < count; i++)
+    //        {
+    //            pointsClassD[i, 0].X = pointsStructD[i, 0].X = rnd.NextDouble() * 1000;
+    //            pointsClassD[i, 0].Y = pointsStructD[i, 0].Y = rnd.NextDouble() * 1000;
+
+    //            pointsClassF[i, 0].X = pointsStructF[i, 0].X = (float)pointsClassD[i, 0].X;
+    //            pointsClassF[i, 0].Y = pointsStructF[i, 0].Y = (float)pointsClassD[i, 0].Y;
+    //        }
+
+    //        //foreach (var item in arrayFloat)
+    //        //{
+    //        //    Console.Write($"{item} ");
+    //        //}
+    //        //Console.WriteLine();
+    //        //foreach (var item in arrayDouble)
+    //        //{
+    //        //    Console.Write($"{item} ");
+    //        //}
+
+    //        BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
+    //        Console.ReadKey();
+    //    }
+    //}
+    //public class PointClass<T>
+    //{
+    //    public T X;
+    //    public T Y;
+    //}
+
+    //public struct PointStruct<T>
+    //{
+    //    public T X;
+    //    public T Y;
+    //}
+    //public class BenchmarkClass
+    //{
+
+    //    #region Тестируемые методы
+
+
+    //    public static float PointDistanceF(PointStruct<float> pointOne, PointStruct<float> pointTwo)
+    //    {
+    //        float x = pointOne.X - pointTwo.X;
+    //        float y = pointOne.Y - pointTwo.Y;
+
+    //        return MathF.Sqrt((x * x) + (y * y));
+    //    }
+
+    //    public static double PointDistanceD(PointStruct<double> pointOne, PointStruct<double> pointTwo)
+    //    {
+    //        double x = pointOne.X - pointTwo.X;
+    //        double y = pointOne.Y - pointTwo.Y;
+
+    //        return Math.Sqrt((x * x) + (y * y));
+    //    }
+
+    //    public static float PointDistanceF(PointClass<float> pointOne, PointClass<float> pointTwo)
+    //    {
+    //        float x = pointOne.X - pointTwo.X;
+    //        float y = pointOne.Y - pointTwo.Y;
+
+    //        return MathF.Sqrt((x * x) + (y * y));
+    //    }
+
+    //    public static double PointDistanceD(PointClass<double> pointOne, PointClass<double> pointTwo)
+    //    {
+    //        double x = pointOne.X - pointTwo.X;
+    //        double y = pointOne.Y - pointTwo.Y;
+
+    //        return Math.Sqrt((x * x) + (y * y));
+    //    }
+    //    #endregion
+
+    //    [Benchmark]
+    //    public void TestCalculateDistanceClassF()
+    //    {
+    //        for (int i = 0; i < 10000; i++)
+    //        {
+    //            //PointDistanceF(Program.pointsClassF[i, 0], Program.pointsClassF[i, 1]);
+    //            int o = i + i;
+    //        }
+    //    }
+
+    //}
+
+
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Задача 2. Требуется реализовать класс двусвязного списка и операции вставки, удаления и поиска элемента в нём в соответствии с интерфейсом.");
-
-            NodeList list = new NodeList();
-
-            list.AddNode(1);
-            list.AddNode(2);
-            list.AddNode(3);
-            list.AddNode(4);
-            list.AddNode(5);
-            list.AddNode(6);
-            //list.AddNodeAfter(list.FindNode(5), 400);
-            Console.WriteLine(list);
-
-            list.RemoveNode(5);
-            Console.WriteLine(list);
+            var summary = BenchmarkRunner.Run<BenchmarkClass>();
+            //BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
         }
-
-
     }
 
-    public class Node
+    public class PointClass<T>
     {
-        public int Value { get; set; }
-        public Node NextNode { get; set; }
-        public Node PrevNode { get; set; }
-    }
+        public T X;
+        public T Y;
 
-    //Начальную и конечную ноду нужно хранить в самой реализации интерфейса
-    public interface ILinkedList
-    {
-        int GetCount(); // возвращает количество элементов в списке
-        void AddNode(int value);  // добавляет новый элемент списка
-        void AddNodeAfter(Node node, int value); // добавляет новый элемент списка после определённого элемента
-        void RemoveNode(int index); // удаляет элемент по порядковому номеру
-        void RemoveNode(Node node); // удаляет указанный элемент
-        Node FindNode(int searchValue); // ищет элемент по его значению
-    }
-
-    class NodeList : ILinkedList
-    {
-        private int count;
-
-        Node head;
-        Node tail;
-
-        public void AddNode(int value)
+        public PointClass(T x, T y)
         {
-            Node newNode = new Node() { Value = value };
-            if (head == null)
-                head = newNode;
-            else
-            {
-                Node node = head;
-                while (node.NextNode != null)
-                {
-                    node = node.NextNode;
-                }
-
-                node.NextNode = newNode;
-                newNode.PrevNode = node;
-
-                tail = newNode;
-            }
-            count++;
-        }
-
-        public void AddNodeAfter(Node node, int value)
-        {
-            if (node == tail)
-            {
-                // если нужно вставить новый node после последнего, то воспользуемся готовым методом
-                AddNode(value);
-            }
-            else
-            {
-                Node newNode = new Node() { Value = value };
-                Node tmp = head;
-                while (tmp != null)
-                {
-                    if (tmp.NextNode == node)
-                    {
-                        count++;
-                        // Встраивание нового node в список
-                        newNode.NextNode = node.NextNode;
-                        newNode.PrevNode = node;
-                        node.NextNode.PrevNode = newNode;
-                        node.NextNode = newNode;
-                        break;
-                    }
-
-                    tmp = tmp.NextNode;
-                }
-            }
-        }
-
-        public Node FindNode(int searchValue)
-        {
-            Node node = head;
-            while (true)
-            {
-                if (node.Value == searchValue) return node;
-
-                if (node.NextNode == null) break;
-                node = node.NextNode;
-
-            }
-
-            return null;
-        }
-
-        public int GetCount() => count;
-
-
-        public void RemoveNode(int index)
-        {
-            if (index >= 0 && index < count)
-            {
-                int i = 0;
-                Node node = head;
-
-                do
-                {
-                    if (index == i)
-                    {
-                        RemoveNode(node);
-                        break;
-                    }
-                    else
-                    {
-                        i++;
-                        node = node.NextNode;
-                    }
-                }
-                while (node != tail);
-            }
-        }
-
-        public void RemoveNode(Node node)
-        {
-            if (node == tail)
-            {
-                tail = node.PrevNode;
-                tail.NextNode = null;
-            }
-            else
-            {
-                node.PrevNode.NextNode = node.NextNode;
-                node.NextNode.PrevNode = node.PrevNode;
-            }
-            count--;
+            X = x;
+            Y = y;
         }
 
         public override string ToString()
         {
-            if (head != null)
-            {
-                Node node = head;
-                string result = "Nodes: ";
-                do
-                {
-                    result += $"{node.Value} ";
-                    node = node.NextNode;
-                }
-                while (node != tail);
-                return result;
-            }
-            else return "Пустой список";
-        }
-
-        public Node this[int index]
-        {
-            get
-            {
-                if (index >= 0 && index < count)
-                {
-                    int i = 0;
-                    Node node = head;
-
-                    while(true)
-                    {
-                        if (i >= count || node == null) break;
-
-                        if (index == i) return node;
-                        else
-                        {
-                            i++;
-                            node = node.NextNode;
-                        }
-
-
-                    }
-                    
-                }
-
-                return null;
-            }
+            return $"({X}, {Y})";
         }
     }
+
+    public struct PointStruct<T>
+    {
+        public T X;
+        public T Y;
+
+        public PointStruct(T x, T y)
+        {
+            X = x;
+            Y = y;
+        }
+        public override string ToString()
+        {
+            return $"({X}, {Y})";
+        }
+    }
+
+    [MemoryDiagnoser]
+    public class BenchmarkClass
+    {
+        public PointClass<double> PointD1 { get; set; }
+        public PointClass<double> PointD2 { get; set; }
+
+        public PointClass<float> PointF1 { get; set; }
+        public PointClass<float> PointF2 { get; set; }
+
+        public PointStruct<double> PointStructD1 { get; set; }
+        public PointStruct<double> PointStructD2 { get; set; }
+
+        public PointStruct<float> PointStructF1 { get; set; }
+        public PointStruct<float> PointStructF2 { get; set; }
+
+        public static IEnumerable<double> 
+        public static float PointDistanceF(PointStruct<float> pointOne, PointStruct<float> pointTwo)
+        {
+            float x = pointOne.X - pointTwo.X;
+            float y = pointOne.Y - pointTwo.Y;
+
+            return MathF.Sqrt((x * x) + (y * y));
+        }
+
+        public static double PointDistanceD(PointStruct<double> pointOne, PointStruct<double> pointTwo)
+        {
+            double x = pointOne.X - pointTwo.X;
+            double y = pointOne.Y - pointTwo.Y;
+
+            return Math.Sqrt((x * x) + (y * y));
+        }
+
+        public static float PointDistanceF(PointClass<float> pointOne, PointClass<float> pointTwo)
+        {
+            float x = pointOne.X - pointTwo.X;
+            float y = pointOne.Y - pointTwo.Y;
+
+            return MathF.Sqrt((x * x) + (y * y));
+        }
+
+        public static double PointDistanceD(PointClass<double> pointOne, PointClass<double> pointTwo)
+        {
+            double x = pointOne.X - pointTwo.X;
+            double y = pointOne.Y - pointTwo.Y;
+
+            return Math.Sqrt((x * x) + (y * y));
+        }
+
+        
+
+
+
+
+
+        [Benchmark]
+        public void TestPointClassDouble()
+        {
+            PointDistanceD(new PointClass<double>(0.123, 999.999), new PointClass<double>(15.2, 1.44));
+        }
+
+        [Benchmark]
+        public void TestPointClassFloat()
+        {
+            PointDistanceF(new PointClass<float>(0.123f, 999.999f), new PointClass<float>(15.2f, 1.44f));
+        }
+    }
+
 }
