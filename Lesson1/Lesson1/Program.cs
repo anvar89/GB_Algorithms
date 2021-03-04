@@ -5,112 +5,6 @@ using System.Collections.Generic;
 
 namespace Lesson1
 {
-    //class Program
-    //{
-    //    public static PointClass<double>[,] pointsClassD;
-    //    public static PointStruct<double>[,] pointsStructD;
-    //    public static PointClass<float>[,] pointsClassF;
-    //    public static PointStruct<float>[,] pointsStructF;
-
-    //    static void Main(string[] args)
-    //    {
-    //        Console.WriteLine("Задача: Напишите тесты производительности для расчёта дистанции между точками с помощью BenchmarkDotNet. " +
-    //            "Рекомендуем сгенерировать заранее массив данных, чтобы расчёт шёл с различными значениями, но сам код генерации должен ," +
-    //            "происходить вне участка кода, время которого будет тестироваться.");
-    //        // Генерирование массивов для теста
-    //        int count = 1000;
-    //        pointsClassD = new PointClass<double>[count, 2];
-    //        pointsStructD = new PointStruct<double>[count, 2];
-    //        pointsClassF = new PointClass<float>[count, 2];
-    //        pointsStructF = new PointStruct<float>[count, 2];
-
-    //        Random rnd = new Random();
-
-    //        for (int i = 0; i < count; i++)
-    //        {
-    //            pointsClassD[i, 0].X = pointsStructD[i, 0].X = rnd.NextDouble() * 1000;
-    //            pointsClassD[i, 0].Y = pointsStructD[i, 0].Y = rnd.NextDouble() * 1000;
-
-    //            pointsClassF[i, 0].X = pointsStructF[i, 0].X = (float)pointsClassD[i, 0].X;
-    //            pointsClassF[i, 0].Y = pointsStructF[i, 0].Y = (float)pointsClassD[i, 0].Y;
-    //        }
-
-    //        //foreach (var item in arrayFloat)
-    //        //{
-    //        //    Console.Write($"{item} ");
-    //        //}
-    //        //Console.WriteLine();
-    //        //foreach (var item in arrayDouble)
-    //        //{
-    //        //    Console.Write($"{item} ");
-    //        //}
-
-    //        BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
-    //        Console.ReadKey();
-    //    }
-    //}
-    //public class PointClass<T>
-    //{
-    //    public T X;
-    //    public T Y;
-    //}
-
-    //public struct PointStruct<T>
-    //{
-    //    public T X;
-    //    public T Y;
-    //}
-    //public class BenchmarkClass
-    //{
-
-    //    #region Тестируемые методы
-
-
-    //    public static float PointDistanceF(PointStruct<float> pointOne, PointStruct<float> pointTwo)
-    //    {
-    //        float x = pointOne.X - pointTwo.X;
-    //        float y = pointOne.Y - pointTwo.Y;
-
-    //        return MathF.Sqrt((x * x) + (y * y));
-    //    }
-
-    //    public static double PointDistanceD(PointStruct<double> pointOne, PointStruct<double> pointTwo)
-    //    {
-    //        double x = pointOne.X - pointTwo.X;
-    //        double y = pointOne.Y - pointTwo.Y;
-
-    //        return Math.Sqrt((x * x) + (y * y));
-    //    }
-
-    //    public static float PointDistanceF(PointClass<float> pointOne, PointClass<float> pointTwo)
-    //    {
-    //        float x = pointOne.X - pointTwo.X;
-    //        float y = pointOne.Y - pointTwo.Y;
-
-    //        return MathF.Sqrt((x * x) + (y * y));
-    //    }
-
-    //    public static double PointDistanceD(PointClass<double> pointOne, PointClass<double> pointTwo)
-    //    {
-    //        double x = pointOne.X - pointTwo.X;
-    //        double y = pointOne.Y - pointTwo.Y;
-
-    //        return Math.Sqrt((x * x) + (y * y));
-    //    }
-    //    #endregion
-
-    //    [Benchmark]
-    //    public void TestCalculateDistanceClassF()
-    //    {
-    //        for (int i = 0; i < 10000; i++)
-    //        {
-    //            //PointDistanceF(Program.pointsClassF[i, 0], Program.pointsClassF[i, 1]);
-    //            int o = i + i;
-    //        }
-    //    }
-
-    //}
-
 
     class Program
     {
@@ -157,19 +51,102 @@ namespace Lesson1
     [MemoryDiagnoser]
     public class BenchmarkClass
     {
+        static int testCount = 2;
+
+        //[ParamsSource(nameof(PointsClassDouble))]
+        //public PointClass<double> PointD1 { get; set; }
+
+        //[ParamsSource(nameof(PointsClassDouble))]
+        //public PointClass<double> PointD2 { get; set; }
+
+        //[ParamsSource(nameof(PointsClassFloat))]
+        //public PointClass<float> PointF1 { get; set; }
+
+        //[ParamsSource(nameof(PointsClassFloat))]
+        //public PointClass<float> PointF2 { get; set; }
+
+        //[ParamsSource(nameof(PointStructDouble))]
+        //public PointStruct<double> PointStructD1 { get; set; }
+
+        //[ParamsSource(nameof(PointStructDouble))]
+        //public PointStruct<double> PointStructD2 { get; set; }
+
+        //[ParamsSource(nameof(PointStructFloat))]
+        //public PointStruct<float> PointStructF1 { get; set; }
+
+        //[ParamsSource(nameof(PointStructFloat))]
+        //public PointStruct<float> PointStructF2 { get; set; }
+
+        [Params(10)]
         public PointClass<double> PointD1 { get; set; }
+
+        [Params(11)]
         public PointClass<double> PointD2 { get; set; }
 
+        [Params(12)] 
         public PointClass<float> PointF1 { get; set; }
+
+        [Params(13)]
         public PointClass<float> PointF2 { get; set; }
 
+        [Params(14)]
         public PointStruct<double> PointStructD1 { get; set; }
+
+        [Params(15)]
         public PointStruct<double> PointStructD2 { get; set; }
 
+        [Params(165)]
         public PointStruct<float> PointStructF1 { get; set; }
+
+        [Params(151)]
         public PointStruct<float> PointStructF2 { get; set; }
 
-        public static IEnumerable<double> 
+        public static IEnumerable<PointClass<double>> PointsClassDouble()
+        {
+            Random rnd = new Random();
+            PointClass<double>[] result = new PointClass<double>[testCount];
+            for (int i = 0; i < testCount; i++)
+            {
+                result[i] = new PointClass<double>(rnd.NextDouble() * 1000.0, rnd.NextDouble() * 1000.0);
+            }
+            return result;
+        }
+
+        public static IEnumerable<PointClass<float>> PointsClassFloat()
+        {
+            Random rnd = new Random();
+            PointClass<float>[] result = new PointClass<float>[testCount];
+            for (int i = 0; i < testCount; i++)
+            {
+                result[i] = new PointClass<float>((float)(rnd.NextDouble() * 1000.0), (float)(rnd.NextDouble() * 1000.0));
+            }
+            return result;
+        }
+
+        public static IEnumerable<PointStruct<double>> PointStructDouble()
+        {
+            Random rnd = new Random();
+            PointStruct<double>[] result = new PointStruct<double>[testCount];
+            for (int i = 0; i < testCount; i++)
+            {
+                result[i] = new PointStruct<double>(rnd.NextDouble() * 1000.0, rnd.NextDouble() * 1000.0);
+            }
+            return result;
+        }
+
+        public static IEnumerable<PointStruct<float>> PointStructFloat()
+        {
+            Random rnd = new Random();
+            PointStruct<float>[] result = new PointStruct<float>[testCount];
+            for (int i = 0; i < testCount; i++)
+            {
+                result[i] = new PointStruct<float>((float)(rnd.NextDouble() * 1000.0), (float)(rnd.NextDouble() * 1000.0));
+            }
+            return result;
+        }
+
+
+
         public static float PointDistanceF(PointStruct<float> pointOne, PointStruct<float> pointTwo)
         {
             float x = pointOne.X - pointTwo.X;
@@ -202,7 +179,7 @@ namespace Lesson1
             return Math.Sqrt((x * x) + (y * y));
         }
 
-        
+        public static int TestOfTests() => 2 * 2;
 
 
 
@@ -211,14 +188,29 @@ namespace Lesson1
         [Benchmark]
         public void TestPointClassDouble()
         {
-            PointDistanceD(new PointClass<double>(0.123, 999.999), new PointClass<double>(15.2, 1.44));
+            PointDistanceD(PointD1, PointD2);
+            //TestOfTests();
+
         }
 
         [Benchmark]
         public void TestPointClassFloat()
         {
-            PointDistanceF(new PointClass<float>(0.123f, 999.999f), new PointClass<float>(15.2f, 1.44f));
+            PointDistanceF(PointF1, PointF2);
         }
+
+        [Benchmark]
+        public void TestPointStructDouble()
+        {
+            PointDistanceD(PointStructD1, PointStructD2);
+        }
+
+        [Benchmark]
+        public void TestPointStructFloat()
+        {
+            PointDistanceF(PointStructF1, PointStructF2);
+        }
+
     }
 
 }
