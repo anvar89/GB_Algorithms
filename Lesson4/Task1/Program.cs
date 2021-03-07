@@ -23,7 +23,7 @@ namespace Task1
             */
         }
     }
-    
+
     public class BenchmarkTest
     {
         HashSet<string> set;
@@ -38,7 +38,7 @@ namespace Task1
             set = new HashSet<string>();
             array = new string[10000];
 
-            
+
             for (int i = 0; i < 10000; i++)
             {
                 array[i] = GetRandomString(10);
@@ -73,6 +73,6 @@ namespace Task1
             }
             return false;
         }
-        
+
     }
 }
