@@ -15,6 +15,11 @@ namespace Task2
             bTree.AddItem(10);
             bTree.AddItem(11);
             bTree.AddItem(8);
+            bTree.AddItem(7);
+            bTree.AddItem(12);
+            bTree.AddItem(9);
+
+            bTree.PrintTree();
 
 
             Console.ReadKey();
@@ -87,7 +92,12 @@ namespace Task2
 
         public void PrintTree()
         {
-            throw new NotImplementedException();
+            var cheatInfo = TreeHelper.GetTreeInLine(this);
+
+            while (true)
+            {
+                currentDepth = cheatInfo.Whe
+            }
         }
 
         public void RemoveItem(int value)
