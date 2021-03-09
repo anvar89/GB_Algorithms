@@ -7,8 +7,8 @@ namespace Task2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Задача 2. Реализуйте класс двоичного дерева поиска с операциями вставки, удаления, поиска. Дерево должно быть сбалансированным (это требование не обязательно)." +
-                " Также напишите метод вывода в консоль дерева, чтобы увидеть, насколько корректно работает ваша реализация. ");
+            //Задача 2. Реализуйте класс двоичного дерева поиска с операциями вставки, удаления, поиска. Дерево должно быть сбалансированным (это требование не обязательно).
+            //    Также напишите метод вывода в консоль дерева, чтобы увидеть, насколько корректно работает ваша реализация. 
 
             var bTree = new BinaryTree();
 
@@ -21,8 +21,15 @@ namespace Task2
 
             bTree.PrintTree();
 
+            //var info = TreeHelper.GetTreeInLine(bTree);
 
-            Console.ReadKey();
+            //foreach (var item in info)
+            //{
+            //    Console.WriteLine($"Value = {item.Node.Value}");
+            //    Console.WriteLine($"Depth = {item.Depth}");
+            //    Console.WriteLine("");
+            //}
+            //Console.ReadKey();
 
         }
     }
@@ -92,12 +99,51 @@ namespace Task2
 
         public void PrintTree()
         {
+            Console.WindowHeight = Console.LargestWindowHeight;
+            Console.WindowWidth = Console.LargestWindowWidth;
+            Console.Clear();
+            
             var cheatInfo = TreeHelper.GetTreeInLine(this);
+            printNode(root, 0, 0, Console.WindowWidth);
 
-            while (true)
+        }
+
+        private void printNode(TreeNode node, int vertCoordinate, int horCoordStart, int horCoordEnd)
+        {
+            if (node == null) return;
+
+            // Вывод на экран нода
+            string nodeText = $"({node.Value})";
+            Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 2 - nodeText.Length / 2, vertCoordinate++);
+            Console.Write(nodeText);
+
+            // Отрисовка линий ┌─┴─┐ ┌─┘ └─┐
+            if (node.LeftChild != null || node.RightChild != null)
             {
-                currentDepth = cheatInfo.Whe
+                if (node.LeftChild != null && node.RightChild != null)  // У нода есть оба потомка
+                {
+                    Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 4, vertCoordinate++);
+                    String line = new string('─', horCoordStart + (horCoordEnd - horCoordStart) / 4 - 1);
+                    Console.Write("┌" + line + "┴" + line + "┐");
+                }
+
+                if (node.LeftChild != null && node.RightChild == null)  // есть только левый потомок
+                {
+                    Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 4, vertCoordinate++);
+                    String line = new string('─', horCoordStart + (horCoordEnd - horCoordStart) / 4 - 1);
+                    Console.Write("┌" + line + "┘");
+                }
+
+                if (node.LeftChild == null && node.RightChild != null)  // есть только правый потомок
+                {
+                    Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 2, vertCoordinate++);
+                    String line = new string('─', horCoordStart + (horCoordEnd - horCoordStart) / 4 - 1);
+                    Console.Write("└" + line + "┐");
+                }
             }
+
+            printNode(node.LeftChild, vertCoordinate, horCoordStart, (horCoordEnd - horCoordStart) / 2);
+            printNode(node.RightChild, vertCoordinate, (horCoordEnd - horCoordStart) / 2, horCoordEnd);
         }
 
         public void RemoveItem(int value)
