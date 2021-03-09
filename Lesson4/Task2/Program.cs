@@ -12,25 +12,28 @@ namespace Task2
 
             var bTree = new BinaryTree();
 
-            bTree.AddItem(10);
-            bTree.AddItem(11);
-            bTree.AddItem(8);
-            bTree.AddItem(7);
-            bTree.AddItem(12);
-            bTree.AddItem(9);
+            while (true)
+            {
+                bTree.PrintTree();
 
-            bTree.PrintTree();
+                //Console.WriteLine();
+                //Console.WriteLine("<F1> - добавить новый случайный элемент");
+                //Console.WriteLine("<F2> - добавить элемент с пользовательским значением");
+                //Console.WriteLine("<F3> - удалить элемент");
+                //Console.WriteLine("<F10> - выход");
 
-            //var info = TreeHelper.GetTreeInLine(bTree);
+                switch (Console.ReadKey().Key)
+                {
+                    case ConsoleKey.F1:
+                        Random rnd = new Random();
+                        bTree.AddItem(rnd.Next(1000));
+                        break;
 
-            //foreach (var item in info)
-            //{
-            //    Console.WriteLine($"Value = {item.Node.Value}");
-            //    Console.WriteLine($"Depth = {item.Depth}");
-            //    Console.WriteLine("");
-            //}
-            //Console.ReadKey();
+                    case ConsoleKey.F10:
+                        return;
 
+                }
+            }
         }
     }
 
@@ -99,13 +102,43 @@ namespace Task2
 
         public void PrintTree()
         {
-            Console.WindowHeight = Console.LargestWindowHeight;
-            Console.WindowWidth = Console.LargestWindowWidth;
             Console.Clear();
-            
-            var cheatInfo = TreeHelper.GetTreeInLine(this);
-            printNode(root, 0, 0, Console.WindowWidth);
 
+            //printNode(root, 0, 0, Console.WindowWidth);
+            string line = string.Empty;
+            printAltTree(root, line);
+
+            Console.WriteLine();
+        }
+
+        private void printAltTree(TreeNode node, string auxString)
+        {
+            if (node == null) return;
+            Console.WriteLine(node.Value);
+
+            if (node.LeftChild != null || node.RightChild != null)
+            {
+                if (node.LeftChild != null && node.RightChild != null)  // У нода есть оба потомка
+                {
+                    Console.Write(auxString + "├[L]");
+                    
+                    printAltTree(node.LeftChild, auxString + "│   ");
+                    Console.Write(auxString + "└[R]");
+                    printAltTree(node.RightChild, auxString + "    ");
+                }
+
+                if (node.LeftChild != null && node.RightChild == null)  // есть только левый потомок
+                {
+                    Console.Write(auxString + "└[L]");
+                    printAltTree(node.LeftChild, auxString + "    ");
+                }
+
+                if (node.LeftChild == null && node.RightChild != null)  // есть только правый потомок
+                {
+                    Console.Write(auxString + "└[R]");
+                    printAltTree(node.RightChild, auxString + "    ");
+                }
+            }
         }
 
         private void printNode(TreeNode node, int vertCoordinate, int horCoordStart, int horCoordEnd)
@@ -130,25 +163,67 @@ namespace Task2
                 if (node.LeftChild != null && node.RightChild == null)  // есть только левый потомок
                 {
                     Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 4, vertCoordinate++);
-                    String line = new string('─', horCoordStart + (horCoordEnd - horCoordStart) / 4 - 1);
+                    String line = new string('─', (horCoordEnd - horCoordStart) / 4 - 1);
                     Console.Write("┌" + line + "┘");
                 }
 
                 if (node.LeftChild == null && node.RightChild != null)  // есть только правый потомок
                 {
                     Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 2, vertCoordinate++);
-                    String line = new string('─', horCoordStart + (horCoordEnd - horCoordStart) / 4 - 1);
+                    String line = new string('─', (horCoordEnd - horCoordStart) / 4 - 1);
                     Console.Write("└" + line + "┐");
                 }
             }
 
             printNode(node.LeftChild, vertCoordinate, horCoordStart, (horCoordEnd - horCoordStart) / 2);
-            printNode(node.RightChild, vertCoordinate, (horCoordEnd - horCoordStart) / 2, horCoordEnd);
+            printNode(node.RightChild, vertCoordinate, horCoordStart + (horCoordEnd - horCoordStart) / 2, horCoordEnd);
         }
 
         public void RemoveItem(int value)
         {
-            throw new NotImplementedException();
+            var nodeForRemove = this.GetNodeByValue(value);
+            var parent = GetParentOfNode(root, value);
+
+            if (nodeForRemove == null) return;
+
+            if (nodeForRemove.RightChild == null)
+            {
+                // У удаляемого нода нет "правых" потомков
+
+                if (nodeForRemove.LeftChild == null) return;
+
+                if (parent != null)
+                {
+                    if (parent.LeftChild.Value == value)
+                        parent.LeftChild = nodeForRemove.LeftChild;
+
+                    if (parent.RightChild.Value == value)
+                        parent.RightChild = nodeForRemove.LeftChild;
+                }
+            }
+            else
+            {
+               // Есть "правые" потомки. Поиск подходящего нода для замены удаляемого нода
+            }
+        }
+
+        private TreeNode GetParentOfNode(TreeNode node, int value)
+        {
+            if (node == null) return null;
+
+            if (node.Value < value)
+            {
+                if (node.LeftChild.Value == value) return node;
+                else return GetParentOfNode(node.LeftChild, value);
+            }
+
+            if (node.Value > value)
+            {
+                if (node.RightChild.Value == value) return node;
+                else return GetParentOfNode(node.RightChild, value);
+            }
+
+            return null;
         }
     }
 
