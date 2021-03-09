@@ -181,8 +181,7 @@ namespace Task2
 
         public void RemoveItem(int value)
         {
-            var nodeForRemove = this.GetNodeByValue(value);
-            var parent = GetParentOfNode(root, value);
+            var nodeForRemove = GetNodeAndParentByValue(root, value, out TreeNode parent);
 
             if (nodeForRemove == null) return;
 
@@ -192,35 +191,50 @@ namespace Task2
 
                 if (nodeForRemove.LeftChild == null) return;
 
-                if (parent != null)
-                {
+
                     if (parent.LeftChild.Value == value)
                         parent.LeftChild = nodeForRemove.LeftChild;
 
                     if (parent.RightChild.Value == value)
                         parent.RightChild = nodeForRemove.LeftChild;
-                }
             }
             else
             {
                // Есть "правые" потомки. Поиск подходящего нода для замены удаляемого нода
+               if (nodeForRemove.LeftChild == null)
+                {
+                    if (parent.LeftChild.Value == value)
+                        parent.LeftChild = nodeForRemove.RightChild;
+
+                    if (parent.RightChild.Value == value)
+                        parent.RightChild = nodeForRemove.RightChild;
+                }
             }
         }
 
-        private TreeNode GetParentOfNode(TreeNode node, int value)
+        private TreeNode GetNodeAndParentByValue(TreeNode node, int value, out TreeNode parent)
         {
+            parent = null;
             if (node == null) return null;
 
             if (node.Value < value)
             {
-                if (node.LeftChild.Value == value) return node;
-                else return GetParentOfNode(node.LeftChild, value);
+                if (node.LeftChild.Value == value)
+                {
+                    parent = node;
+                    return node.LeftChild;
+                }
+                else return GetNodeAndParentByValue(node.LeftChild, value, out parent);
             }
 
             if (node.Value > value)
             {
-                if (node.RightChild.Value == value) return node;
-                else return GetParentOfNode(node.RightChild, value);
+                if (node.RightChild.Value == value)
+                {
+                    parent = node;
+                    return node;
+                }
+                else return GetNodeAndParentByValue(node.RightChild, value, out parent);
             }
 
             return null;
