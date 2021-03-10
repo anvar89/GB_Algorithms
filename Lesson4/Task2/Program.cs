@@ -10,25 +10,62 @@ namespace Task2
             //Задача 2. Реализуйте класс двоичного дерева поиска с операциями вставки, удаления, поиска. Дерево должно быть сбалансированным (это требование не обязательно).
             //    Также напишите метод вывода в консоль дерева, чтобы увидеть, насколько корректно работает ваша реализация. 
 
+            Random rnd = new Random();
             var bTree = new BinaryTree();
+
+            for (int i = 0; i < 20; i++)
+            {
+                bTree.AddItem(rnd.Next(1000));
+            }
+
+
 
             while (true)
             {
                 bTree.PrintTree();
 
-                //Console.WriteLine();
-                //Console.WriteLine("<F1> - добавить новый случайный элемент");
-                //Console.WriteLine("<F2> - добавить элемент с пользовательским значением");
-                //Console.WriteLine("<F3> - удалить элемент");
-                //Console.WriteLine("<F10> - выход");
+                Console.WriteLine();
+                Console.WriteLine("<F1> - добавить новый случайный элемент");
+                Console.WriteLine("<F2> - добавить элемент с пользовательским значением");
+                Console.WriteLine("<F3> - удалить элемент");
+                Console.WriteLine("<F10> - выход");
 
                 switch (Console.ReadKey().Key)
                 {
                     case ConsoleKey.F1:
-                        Random rnd = new Random();
                         bTree.AddItem(rnd.Next(1000));
                         break;
 
+                    case ConsoleKey.F2:
+                        while (true)
+                        {
+                            Console.Write("Введите число: ");
+                            string s = Console.ReadLine();
+
+                            if (int.TryParse(s, out int value))
+                            {
+                                bTree.AddItem(value);
+                                break;
+                            }
+                            else
+                                Console.WriteLine("Нужно ввести число!");
+                        }
+                        break;
+                    case ConsoleKey.F5:
+                        while (true)
+                        {
+                            Console.Write("Введите значение узла, который нужно удалить: ");
+                            string s = Console.ReadLine();
+
+                            if (int.TryParse(s, out int value))
+                            {
+                                bTree.RemoveItem(value);
+                                break;
+                            }
+                            else
+                                Console.WriteLine("Нужно ввести число!");
+                        }
+                        break;
                     case ConsoleKey.F10:
                         return;
 
@@ -104,7 +141,6 @@ namespace Task2
         {
             Console.Clear();
 
-            //printNode(root, 0, 0, Console.WindowWidth);
             string line = string.Empty;
             printAltTree(root, line);
 
@@ -121,62 +157,24 @@ namespace Task2
                 if (node.LeftChild != null && node.RightChild != null)  // У нода есть оба потомка
                 {
                     Console.Write(auxString + "├[L]");
-                    
-                    printAltTree(node.LeftChild, auxString + "│   ");
+
+                    printAltTree(node.LeftChild, auxString + "│  ");
                     Console.Write(auxString + "└[R]");
-                    printAltTree(node.RightChild, auxString + "    ");
+                    printAltTree(node.RightChild, auxString + "   ");
                 }
 
                 if (node.LeftChild != null && node.RightChild == null)  // есть только левый потомок
                 {
                     Console.Write(auxString + "└[L]");
-                    printAltTree(node.LeftChild, auxString + "    ");
+                    printAltTree(node.LeftChild, auxString + "   ");
                 }
 
                 if (node.LeftChild == null && node.RightChild != null)  // есть только правый потомок
                 {
                     Console.Write(auxString + "└[R]");
-                    printAltTree(node.RightChild, auxString + "    ");
+                    printAltTree(node.RightChild, auxString + "   ");
                 }
             }
-        }
-
-        private void printNode(TreeNode node, int vertCoordinate, int horCoordStart, int horCoordEnd)
-        {
-            if (node == null) return;
-
-            // Вывод на экран нода
-            string nodeText = $"({node.Value})";
-            Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 2 - nodeText.Length / 2, vertCoordinate++);
-            Console.Write(nodeText);
-
-            // Отрисовка линий ┌─┴─┐ ┌─┘ └─┐
-            if (node.LeftChild != null || node.RightChild != null)
-            {
-                if (node.LeftChild != null && node.RightChild != null)  // У нода есть оба потомка
-                {
-                    Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 4, vertCoordinate++);
-                    String line = new string('─', horCoordStart + (horCoordEnd - horCoordStart) / 4 - 1);
-                    Console.Write("┌" + line + "┴" + line + "┐");
-                }
-
-                if (node.LeftChild != null && node.RightChild == null)  // есть только левый потомок
-                {
-                    Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 4, vertCoordinate++);
-                    String line = new string('─', (horCoordEnd - horCoordStart) / 4 - 1);
-                    Console.Write("┌" + line + "┘");
-                }
-
-                if (node.LeftChild == null && node.RightChild != null)  // есть только правый потомок
-                {
-                    Console.SetCursorPosition(horCoordStart + (horCoordEnd - horCoordStart) / 2, vertCoordinate++);
-                    String line = new string('─', (horCoordEnd - horCoordStart) / 4 - 1);
-                    Console.Write("└" + line + "┐");
-                }
-            }
-
-            printNode(node.LeftChild, vertCoordinate, horCoordStart, (horCoordEnd - horCoordStart) / 2);
-            printNode(node.RightChild, vertCoordinate, horCoordStart + (horCoordEnd - horCoordStart) / 2, horCoordEnd);
         }
 
         public void RemoveItem(int value)
@@ -191,23 +189,57 @@ namespace Task2
 
                 if (nodeForRemove.LeftChild == null) return;
 
-
-                    if (parent.LeftChild.Value == value)
+                if (parent != null)
+                {
+                    if (parent.LeftChild != null && parent.LeftChild.Value == value)
                         parent.LeftChild = nodeForRemove.LeftChild;
 
-                    if (parent.RightChild.Value == value)
+                    if (parent.RightChild != null && parent.RightChild.Value == value)
                         parent.RightChild = nodeForRemove.LeftChild;
+                }
+                else
+                {
+                    // Удаляемый нод является корневым (root)
+                    root = nodeForRemove.LeftChild;
+                }
             }
             else
             {
-               // Есть "правые" потомки. Поиск подходящего нода для замены удаляемого нода
-               if (nodeForRemove.LeftChild == null)
+                // Есть "правые" потомки. Поиск подходящего нода для замены удаляемого нода
+                if (nodeForRemove.LeftChild == null)
                 {
-                    if (parent.LeftChild.Value == value)
+                    // У удаляемого нода есть только "правый" потомок
+
+                    if (parent == null)
+                    {
+                        // Удаляемый нод является корневым (root)
+                        root = nodeForRemove.RightChild;
+                        return;
+                    }
+
+                    if (parent.LeftChild != null && parent.LeftChild.Value == value)
                         parent.LeftChild = nodeForRemove.RightChild;
 
-                    if (parent.RightChild.Value == value)
+                    if (parent.RightChild != null && parent.RightChild.Value == value)
                         parent.RightChild = nodeForRemove.RightChild;
+                }
+                else
+                {
+                    // У удаляемого нода есть и "левый" и "правый" потомок
+                    TreeNode minNode = GetMinNode(nodeForRemove.RightChild);
+                    GetNodeAndParentByValue(root, minNode.Value, out TreeNode parentOfMinNode);
+                    if (parent != null)
+                    {
+                        if (parent.LeftChild != null && parent.LeftChild.Value == value)
+                            parent.LeftChild = minNode;
+
+                        if (parent.RightChild != null && parent.RightChild.Value == value)
+                            parent.RightChild = minNode;
+                    }
+                    parentOfMinNode.LeftChild = null;
+
+                    minNode.LeftChild = nodeForRemove.LeftChild;
+                    minNode.RightChild = nodeForRemove.RightChild;
                 }
             }
         }
@@ -217,8 +249,11 @@ namespace Task2
             parent = null;
             if (node == null) return null;
 
-            if (node.Value < value)
+
+            if (node.Value > value)
             {
+                if (node.LeftChild == null) return null;
+
                 if (node.LeftChild.Value == value)
                 {
                     parent = node;
@@ -227,17 +262,26 @@ namespace Task2
                 else return GetNodeAndParentByValue(node.LeftChild, value, out parent);
             }
 
-            if (node.Value > value)
+            if (node.Value < value)
             {
+                if (node.RightChild == null) return null;
+
                 if (node.RightChild.Value == value)
                 {
                     parent = node;
-                    return node;
+                    return node.RightChild;
                 }
                 else return GetNodeAndParentByValue(node.RightChild, value, out parent);
             }
 
             return null;
+        }
+
+        private TreeNode GetMinNode(TreeNode node)
+        {
+            if (node.LeftChild == null) return node;
+
+            return GetMinNode(node.LeftChild);
         }
     }
 
