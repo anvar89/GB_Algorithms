@@ -27,7 +27,7 @@ namespace Task2
                 Console.WriteLine();
                 Console.WriteLine("<F1> - добавить новый случайный элемент");
                 Console.WriteLine("<F2> - добавить элемент с пользовательским значением");
-                Console.WriteLine("<F3> - удалить элемент");
+                Console.WriteLine("<F5> - удалить элемент");
                 Console.WriteLine("<F10> - выход");
 
                 switch (Console.ReadKey().Key)
@@ -78,13 +78,10 @@ namespace Task2
     {
         private TreeNode root;
 
-        public int Depth { get; private set; }
-
         public void AddItem(int value)
         {
             if (root == null)
             {
-                Depth = 1;
                 root = new TreeNode() { Value = value };
             }
             else
@@ -98,8 +95,6 @@ namespace Task2
                 if (node.LeftChild == null)
                 {
                     node.LeftChild = new TreeNode() { Value = value };
-                    if (node.RightChild == null) Depth++;
-
                     return;
                 }
 
@@ -111,7 +106,6 @@ namespace Task2
                 if (node.RightChild == null)
                 {
                     node.RightChild = new TreeNode() { Value = value };
-                    if (node.LeftChild == null) Depth++;
                     return;
                 }
 
@@ -158,108 +152,110 @@ namespace Task2
                 {
                     Console.Write(auxString + "├[L]");
 
-                    printAltTree(node.LeftChild, auxString + "│  ");
+                    printAltTree(node.LeftChild, auxString + "│   ");
                     Console.Write(auxString + "└[R]");
-                    printAltTree(node.RightChild, auxString + "   ");
+                    printAltTree(node.RightChild, auxString + "    ");
                 }
 
                 if (node.LeftChild != null && node.RightChild == null)  // есть только левый потомок
                 {
                     Console.Write(auxString + "└[L]");
-                    printAltTree(node.LeftChild, auxString + "   ");
+                    printAltTree(node.LeftChild, auxString + "    ");
                 }
 
                 if (node.LeftChild == null && node.RightChild != null)  // есть только правый потомок
                 {
                     Console.Write(auxString + "└[R]");
-                    printAltTree(node.RightChild, auxString + "   ");
+                    printAltTree(node.RightChild, auxString + "    ");
                 }
             }
         }
 
+        /// <summary>
+        /// Удаляет элемент с указанным значением
+        /// </summary>
+        /// <param name="value"></param>
         public void RemoveItem(int value)
         {
-            var nodeForRemove = GetNodeAndParentByValue(root, value, out TreeNode parent);
+            //var nodeForRemove = GetNodeByValue(value);
+            //var parent = GetParent(root, value);
 
-            if (nodeForRemove == null) return;
+            //if (nodeForRemove == null) return;
 
-            if (nodeForRemove.RightChild == null)
-            {
-                // У удаляемого нода нет "правых" потомков
+            //if (nodeForRemove.RightChild == null)
+            //{
+            //    // У удаляемого нода нет "правых" потомков
 
-                if (nodeForRemove.LeftChild == null) return;
+            //    if (nodeForRemove.LeftChild == null) return;
 
-                if (parent != null)
-                {
-                    if (parent.LeftChild != null && parent.LeftChild.Value == value)
-                        parent.LeftChild = nodeForRemove.LeftChild;
+            //    if (nodeForRemove != root)
+            //    {
+            //        if (parent.LeftChild != null && parent.LeftChild.Value == value)
+            //            parent.LeftChild = nodeForRemove.LeftChild;
 
-                    if (parent.RightChild != null && parent.RightChild.Value == value)
-                        parent.RightChild = nodeForRemove.LeftChild;
-                }
-                else
-                {
-                    // Удаляемый нод является корневым (root)
-                    root = nodeForRemove.LeftChild;
-                }
-            }
-            else
-            {
-                // Есть "правые" потомки. Поиск подходящего нода для замены удаляемого нода
-                if (nodeForRemove.LeftChild == null)
-                {
-                    // У удаляемого нода есть только "правый" потомок
+            //        if (parent.RightChild != null && parent.RightChild.Value == value)
+            //            parent.RightChild = nodeForRemove.LeftChild;
+            //    }
+            //    else
+            //    {
+            //        // Удаляемый нод является корневым (root)
+            //        root = nodeForRemove.LeftChild;
+            //    }
+            //}
+            //else
+            //{
+            //    // Есть "правые" потомки. Поиск подходящего нода для замены удаляемого нода
+            //    if (nodeForRemove.LeftChild == null)
+            //    {
+            //        // У удаляемого нода есть только "правый" потомок
 
-                    if (parent == null)
-                    {
-                        // Удаляемый нод является корневым (root)
-                        root = nodeForRemove.RightChild;
-                        return;
-                    }
+            //        if (nodeForRemove != root)
+            //        {
+            //            // Удаляемый нод является корневым (root)
+            //            root = nodeForRemove.RightChild;
+            //            return;
+            //        }
 
-                    if (parent.LeftChild != null && parent.LeftChild.Value == value)
-                        parent.LeftChild = nodeForRemove.RightChild;
+            //        if (parent.LeftChild != null && parent.LeftChild.Value == value)
+            //            parent.LeftChild = nodeForRemove.RightChild;
 
-                    if (parent.RightChild != null && parent.RightChild.Value == value)
-                        parent.RightChild = nodeForRemove.RightChild;
-                }
-                else
-                {
-                    // У удаляемого нода есть и "левый" и "правый" потомок
-                    TreeNode minNode = GetMinNode(nodeForRemove.RightChild);
-                    GetNodeAndParentByValue(root, minNode.Value, out TreeNode parentOfMinNode);
-                    if (parent != null)
-                    {
-                        if (parent.LeftChild != null && parent.LeftChild.Value == value)
-                            parent.LeftChild = minNode;
+            //        if (parent.RightChild != null && parent.RightChild.Value == value)
+            //            parent.RightChild = nodeForRemove.RightChild;
+            //    }
+            //    else
+            //    {
+            //        // У удаляемого нода есть и "левый" и "правый" потомок
+            //        TreeNode minNode = GetMinNode(nodeForRemove.RightChild);
+            //        TreeNode parentOfMinNode = GetParent(root, minNode.Value);
+            //        if (parent != null)
+            //        {
+            //            if (parent.LeftChild != null && parent.LeftChild.Value == value)
+            //                parent.LeftChild = minNode;
 
-                        if (parent.RightChild != null && parent.RightChild.Value == value)
-                            parent.RightChild = minNode;
-                    }
-                    parentOfMinNode.LeftChild = null;
+            //            if (parent.RightChild != null && parent.RightChild.Value == value)
+            //                parent.RightChild = minNode;
+            //        }
+            //        parentOfMinNode.LeftChild = null;
 
-                    minNode.LeftChild = nodeForRemove.LeftChild;
-                    minNode.RightChild = nodeForRemove.RightChild;
-                }
-            }
+            //        minNode.LeftChild = nodeForRemove.LeftChild;
+            //        minNode.RightChild = nodeForRemove.RightChild;
+            //    }
+            //}
+
+            root = RemoveItem(root, value);
         }
-
-        private TreeNode GetNodeAndParentByValue(TreeNode node, int value, out TreeNode parent)
+        private TreeNode GetParent(TreeNode node, int value)
         {
-            parent = null;
-            if (node == null) return null;
-
+            if (root.Value == value || node == null) return null;
 
             if (node.Value > value)
             {
                 if (node.LeftChild == null) return null;
 
                 if (node.LeftChild.Value == value)
-                {
-                    parent = node;
-                    return node.LeftChild;
-                }
-                else return GetNodeAndParentByValue(node.LeftChild, value, out parent);
+                    return node;
+                else 
+                    return GetParent(node.LeftChild, value);
             }
 
             if (node.Value < value)
@@ -267,14 +263,35 @@ namespace Task2
                 if (node.RightChild == null) return null;
 
                 if (node.RightChild.Value == value)
-                {
-                    parent = node;
-                    return node.RightChild;
-                }
-                else return GetNodeAndParentByValue(node.RightChild, value, out parent);
+                    return node;
+                else 
+                    return GetParent(node.RightChild, value);
             }
 
             return null;
+        }
+
+        private TreeNode RemoveItem(TreeNode node, int value)
+        {
+            if (node == null) return null;
+
+            if (node.Value > value)
+                node.LeftChild = RemoveItem(node.LeftChild, value);
+            else if (node.Value < value)
+                node.RightChild = RemoveItem(node.RightChild, value);
+            else if (node.LeftChild != null && node.RightChild != null)
+            {
+                node.Value = GetMinNode(node.RightChild).Value;
+                node.RightChild = RemoveItem(node.RightChild, node.Value);
+            }
+            else if (node.LeftChild != null)
+                node = node.LeftChild;
+            else if (node.RightChild != null)
+                node = node.RightChild;
+            else
+                node = null;
+            return node;
+
         }
 
         private TreeNode GetMinNode(TreeNode node)
