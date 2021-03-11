@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Task2
+namespace Lesson4_Task2
 {
     public class BinaryTree : ITree
     {
@@ -61,7 +61,7 @@ namespace Task2
 
         public void PrintTree()
         {
-            Console.Clear();
+            //Console.Clear();
 
             string line = string.Empty;
             printAltTree(root, line);
