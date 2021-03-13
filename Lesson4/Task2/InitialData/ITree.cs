@@ -1,4 +1,4 @@
-﻿namespace Task2
+﻿namespace Lesson4_Task2
 {
     public interface ITree
     {

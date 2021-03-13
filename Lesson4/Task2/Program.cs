@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace Task2
+namespace Lesson4_Task2
 {
     class Program
     {
@@ -12,9 +13,11 @@ namespace Task2
             Random rnd = new Random();
             var bTree = new BinaryTree();
 
+
             for (int i = 0; i < 20; i++)
             {
                 bTree.AddItem(rnd.Next(1000));
+                //bTree.AddItem(i);
             }
 
             while (true)
@@ -24,6 +27,7 @@ namespace Task2
                 Console.WriteLine();
                 Console.WriteLine("<F1> - добавить новый случайный элемент");
                 Console.WriteLine("<F2> - добавить элемент с пользовательским значением");
+                Console.WriteLine("<F3> - изменить вид отображения дерева");
                 Console.WriteLine("<F5> - удалить элемент");
                 Console.WriteLine("<F10> - выход");
 
@@ -47,6 +51,9 @@ namespace Task2
                             else
                                 Console.WriteLine("Нужно ввести число!");
                         }
+                        break;
+                    case ConsoleKey.F3:
+                        bTree.UseBTreePrinter ^= true; ;
                         break;
                     case ConsoleKey.F5:
                         while (true)

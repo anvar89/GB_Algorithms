@@ -1,10 +1,12 @@
 ﻿using System;
 
-namespace Task2
+namespace Lesson4_Task2
 {
     public class BinaryTree : ITree
     {
         private TreeNode root;
+
+        public bool UseBTreePrinter { get; set; }
 
         public void AddItem(int value)
         {
@@ -63,8 +65,10 @@ namespace Task2
         {
             Console.Clear();
 
-            string line = string.Empty;
-            printAltTree(root, line);
+            if (UseBTreePrinter)
+                BTreePrinter.Print(root);
+            else
+                printAltTree(root, "");
 
             Console.WriteLine();
         }
@@ -113,7 +117,7 @@ namespace Task2
 
                 if (node.LeftChild.Value == value)
                     return node;
-                else 
+                else
                     return GetParent(node.LeftChild, value);
             }
 
@@ -123,7 +127,7 @@ namespace Task2
 
                 if (node.RightChild.Value == value)
                     return node;
-                else 
+                else
                     return GetParent(node.RightChild, value);
             }
 
