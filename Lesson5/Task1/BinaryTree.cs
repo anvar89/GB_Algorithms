@@ -6,6 +6,8 @@ namespace Lesson4_Task2
     {
         private TreeNode root;
 
+        public bool UseBTreePrinter { get; set; }
+
         public void AddItem(int value)
         {
             if (root == null)
@@ -63,8 +65,10 @@ namespace Lesson4_Task2
         {
             //Console.Clear();
 
-            string line = string.Empty;
-            printAltTree(root, line);
+            if (UseBTreePrinter)
+                BTreePrinter.Print(root);
+            else
+                printAltTree(root, "");
 
             Console.WriteLine();
         }
@@ -113,7 +117,7 @@ namespace Lesson4_Task2
 
                 if (node.LeftChild.Value == value)
                     return node;
-                else 
+                else
                     return GetParent(node.LeftChild, value);
             }
 
@@ -123,7 +127,7 @@ namespace Lesson4_Task2
 
                 if (node.RightChild.Value == value)
                     return node;
-                else 
+                else
                     return GetParent(node.RightChild, value);
             }
 

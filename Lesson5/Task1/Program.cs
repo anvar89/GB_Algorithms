@@ -4,15 +4,15 @@ using Lesson4_Task2;
 
 namespace Task1
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
             Console.WriteLine("Реализуйте DFS и BFS для дерева с выводом каждого шага в консоль. ");
 
-            var testTree1 = new BinaryTree();
-            var testTree2 = new BinaryTree();
-            var testTree3 = new BinaryTree();
+            var testTree1 = new BinaryTree() { UseBTreePrinter = true };
+            var testTree2 = new BinaryTree() { UseBTreePrinter = true };
+            var testTree3 = new BinaryTree() { UseBTreePrinter = true };
 
             int[] array1 = new[] { 879, 585, 486, 897, 785, 892, 102, 1, 652, 985, 2, 600, 925, 12 };
             int[] array2 = new[] { 9, 8, 7, 6, 3, 5, 2, 1, 4, 10, 16, 19, 12, 14, 13, 15 };
@@ -69,7 +69,7 @@ namespace Task1
             printArray(GetArrayDFS(testTree3.GetRoot()));
         }
 
-        static void printArray(TreeNode[] arr)
+        public static void printArray(TreeNode[] arr)
         {
             for (int i = 0; i < arr.Length; i++)
             {
@@ -78,7 +78,7 @@ namespace Task1
             }
         } 
 
-        static TreeNode[] GetArrayBFS(TreeNode node)
+        public static TreeNode[] GetArrayBFS(TreeNode node)
         {
             var bufer = new Queue<TreeNode>();
             var returnArray = new List<TreeNode>();
@@ -99,7 +99,7 @@ namespace Task1
             return returnArray.ToArray();
         }
 
-        static TreeNode[] GetArrayDFS(TreeNode node)
+        public static TreeNode[] GetArrayDFS(TreeNode node)
         {
             var stack = new Stack<TreeNode>();
             var returnArray = new List<TreeNode>();
