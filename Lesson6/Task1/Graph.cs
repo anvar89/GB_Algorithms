@@ -45,7 +45,7 @@ namespace Task1
 
                 for (int i = 0; i < Nodes.Count; i++)
                 {
-                    if (IsExistPath(Nodes[index], Nodes[i]) && nodeStatus[i] == 0)
+                    if (IsExistEdge(Nodes[index], Nodes[i]) && nodeStatus[i] == 0)
                     {
                         nodeStatus[i] = 1;
                         bufer.Enqueue(i);
@@ -60,7 +60,32 @@ namespace Task1
             return returnArray.ToArray();
         }
 
-        private bool IsExistPath(Node startNode, Node endNode)
+        public Node[] GetArrayDFS()
+        {
+            var stack = new Stack<Node>();
+            var returnArray = new List<Node>();
+
+            stack.Push(Nodes[0]);
+
+            while (stack.Count > 0)
+            {
+                var element = stack.Pop();
+
+                if (returnArray.Contains(element)) continue;
+
+                returnArray.Add(element);
+
+                foreach (var node in Nodes)
+                {
+                    if (!returnArray.Contains(node))
+                        stack.Push(node);
+                }
+            }
+
+            return returnArray.ToArray();
+        }
+
+        private bool IsExistEdge(Node startNode, Node endNode)
         {
             foreach (var edge in startNode.Edges)
             {

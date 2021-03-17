@@ -23,7 +23,7 @@ namespace Task1
             g.AddEdge(g.Nodes[5], g.Nodes[0], 1);
 
 
-            var bfs = g.GetArrayBFS();
+            var bfs = g.GetArrayDFS();
 
             foreach (var node in bfs)
             {
