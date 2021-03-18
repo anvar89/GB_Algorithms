@@ -7,7 +7,7 @@ namespace Task1
 /// <summary>
 /// Ребро, Связь между вершинами
 /// </summary>
-    class Edge
+    public class Edge
     {
         public int Weight { get; set; } //вес связи
         public Node Node { get; set; } // узел, на который связь ссылается

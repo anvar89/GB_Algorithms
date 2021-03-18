@@ -8,26 +8,34 @@ namespace Task1
         {
             Graph g = new Graph();
 
-            g.AddNode(new Node() { Value = 10 });
-            g.AddNode(new Node() { Value = 11 });
-            g.AddNode(new Node() { Value = 12 });
-            g.AddNode(new Node() { Value = 13 });
-            g.AddNode(new Node() { Value = 14 });
-            g.AddNode(new Node() { Value = 15 });
+            for (int i = 0; i < 5; i++)
+            {
+                g.AddNode(new Node() { Value = i });
+            }
 
             g.AddEdge(g.Nodes[0], g.Nodes[1], 1);
-            g.AddEdge(g.Nodes[1], g.Nodes[2], 1);
-            g.AddEdge(g.Nodes[2], g.Nodes[3], 1);
+            g.AddEdge(g.Nodes[0], g.Nodes[2], 1);
+            g.AddEdge(g.Nodes[0], g.Nodes[3], 1);
             g.AddEdge(g.Nodes[3], g.Nodes[4], 1);
-            g.AddEdge(g.Nodes[4], g.Nodes[5], 1);
-            g.AddEdge(g.Nodes[5], g.Nodes[0], 1);
+            g.AddEdge(g.Nodes[2], g.Nodes[4], 1);
+            g.AddEdge(g.Nodes[1], g.Nodes[4], 1);
+            
 
 
-            var bfs = g.GetArrayDFS();
-
+            var bfs = g.GetArrayBFS();
+            Console.Write("BFS: ");
             foreach (var node in bfs)
             {
-                Console.Write(node + " -> ");
+                Console.Write(node + " ");
+            }
+
+            Console.WriteLine();
+
+            var dfs = g.GetArrayDFS();
+            Console.Write("DFS: ");
+            foreach (var node in dfs)
+            {
+                Console.Write(node + " ");
             }
         }
     }

@@ -7,7 +7,7 @@ namespace Task1
     /// <summary>
     /// Вершина графа
     /// </summary>
-    class Node
+    public class Node
     {
         public int Value { get; set; }
         public List<Edge> Edges { get; set; } //исходящие связи

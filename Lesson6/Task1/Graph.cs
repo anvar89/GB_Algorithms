@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Task1
 {
-    class Graph
+    public class Graph
     {
         public List<Node> Nodes { get; set; }
         public List<Edge> Edges { get; set; }
@@ -75,10 +75,10 @@ namespace Task1
 
                 returnArray.Add(element);
 
-                foreach (var node in Nodes)
+                foreach (var edge in element.Edges)
                 {
-                    if (!returnArray.Contains(node))
-                        stack.Push(node);
+                    if (!returnArray.Contains(edge.Node))
+                        stack.Push(edge.Node);
                 }
             }
 
