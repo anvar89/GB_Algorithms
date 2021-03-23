@@ -10,7 +10,7 @@ namespace Task2
         static void Main(string[] args)
         {
             Console.WriteLine("Дописать реализацию Bucketsort до возможности сортировки больших массивов из файла (External sort)");
-            //CreateTestFile(1000000);
+            CreateTestFile(15);
             ExternalSort("IntNumbers.txt");
         }
 
@@ -21,14 +21,14 @@ namespace Task2
 
             for (int i = 0; i < n; i++)
             {
-                sb.Append(rnd.Next().ToString() + "\n");
+                sb.Append(rnd.Next(100).ToString() + "\n");
             }
             File.WriteAllText("IntNumbers.txt", sb.ToString());
         }
 
         static void ExternalSort(string path)
         {
-            int n = 1000; // Количество строк файла для одного блока
+            int n = 5; // Количество строк файла для одного блока
             int blockCount = 0; // Счётчик количества блоков
             bool endOfFile = false;
 
@@ -77,7 +77,7 @@ namespace Task2
                 Task1.Program.BucketSort(currentBlock);
 
                 // Запись отсортированного блока во временный файл
-                FileInfo fi = new FileInfo("tmp_block_" + blockCount++);
+                FileInfo fi = new FileInfo("tmp_block_" + blockCount++  +".txt");
                 StreamWriter sw = fi.CreateText();
                 foreach (int item in currentBlock)
                 {
@@ -87,15 +87,17 @@ namespace Task2
             }
 
             // Слияние блоков в новый массив
-            StreamReader[] sr = new StreamReader[blockCount];
-            int index = 0;
+            FileInfo fiFinal = new FileInfo(path + "_sorted" + ".txt");
+            StreamWriter swFinal = fiFinal.CreateText();
+
+            StreamReader[] srFinal = new StreamReader[blockCount];
             string[] currentValueFile = new string[blockCount];
 
-            for (int i = 0; i < sr.Length; i++)
+            for (int i = 0; i < srFinal.Length; i++)
             {
-                sr[i] = new StreamReader("tmp_block_" + i);
+                srFinal[i] = new StreamReader("tmp_block_" + i + ".txt");
 
-                string s = sr[i].ReadLine();
+                string s = srFinal[i].ReadLine();
 
                 if (s is null) continue;
                 currentValueFile[i] = s;
@@ -103,12 +105,46 @@ namespace Task2
 
             while (true)
             {
+                // проверка: прочтены ли все строки всех файлов
+                int min = 0;
+                bool endOfAllFiles = true;
+                for (int i = 0; i < currentValueFile.Length; i++)
+                {
+                    if (currentValueFile[i] is null) continue;
 
+                    endOfAllFiles = false;
+                    min = int.Parse(currentValueFile[i]);
+                    break;
+                }
 
+                if (endOfAllFiles) break; // выход из цикла
+
+                // поиск минимального числа среди текущих
+                int indexOfmin = 0;
+                for (int i = 0; i < currentValueFile.Length; i++)
+                {
+                    if (currentValueFile[i] is null) continue;
+
+                    int tmp = int.Parse(currentValueFile[i]);
+                    if (tmp < min)
+                    {
+
+                        min = tmp;
+                        indexOfmin = i;
+                    }
+                }
+
+                swFinal.WriteLine(currentValueFile[indexOfmin]);
+                currentValueFile[indexOfmin] = srFinal[indexOfmin].ReadLine();
+            }
+
+            swFinal.Close();
+            for (int i = 0; i < blockCount; i++)
+            {
+                srFinal[i].Close();
+                File.Delete("tmp_block_" + i + ".txt");
             }
         }
-
-
     }
 }
 
