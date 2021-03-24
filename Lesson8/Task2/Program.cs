@@ -10,7 +10,7 @@ namespace Task2
         static void Main(string[] args)
         {
             Console.WriteLine("Дописать реализацию Bucketsort до возможности сортировки больших массивов из файла (External sort)");
-            CreateTestFile(15);
+            CreateTestFile(1000000);
             ExternalSort("IntNumbers.txt");
         }
 
@@ -21,14 +21,14 @@ namespace Task2
 
             for (int i = 0; i < n; i++)
             {
-                sb.Append(rnd.Next(100).ToString() + "\n");
+                sb.Append(rnd.Next().ToString() + "\n");
             }
             File.WriteAllText("IntNumbers.txt", sb.ToString());
         }
 
         static void ExternalSort(string path)
         {
-            int n = 5; // Количество строк файла для одного блока
+            int n = 1000; // Количество строк файла для одного блока
             int blockCount = 0; // Счётчик количества блоков
             bool endOfFile = false;
 
@@ -107,6 +107,7 @@ namespace Task2
             {
                 // проверка: прочтены ли все строки всех файлов
                 int min = 0;
+                int indexOfmin = 0;
                 bool endOfAllFiles = true;
                 for (int i = 0; i < currentValueFile.Length; i++)
                 {
@@ -114,13 +115,13 @@ namespace Task2
 
                     endOfAllFiles = false;
                     min = int.Parse(currentValueFile[i]);
+                    indexOfmin = i;
                     break;
                 }
 
                 if (endOfAllFiles) break; // выход из цикла
 
                 // поиск минимального числа среди текущих
-                int indexOfmin = 0;
                 for (int i = 0; i < currentValueFile.Length; i++)
                 {
                     if (currentValueFile[i] is null) continue;
