@@ -11,7 +11,7 @@ namespace Task2
         {
             Console.WriteLine("Дописать реализацию Bucketsort до возможности сортировки больших массивов из файла (External sort)");
             CreateTestFile(1000000);
-            ExternalSort("IntNumbers.txt");
+            ExternalSort("IntNumbers.txt", 1000);
         }
 
         static void CreateTestFile(int n)
@@ -26,9 +26,13 @@ namespace Task2
             File.WriteAllText("IntNumbers.txt", sb.ToString());
         }
 
-        static void ExternalSort(string path)
+        /// <summary>
+        ///  Метод сортировки целочисленных переменных, записанных каждый в новой строке, в текстовом файле
+        /// </summary>
+        /// <param name="path"> Полное имя файла</param>
+        /// <param name="n"> Количество блоков, на которое нужно делить файл</param>
+        static void ExternalSort(string path, int n)
         {
-            int n = 1000; // Количество строк файла для одного блока
             int blockCount = 0; // Счётчик количества блоков
             bool endOfFile = false;
 
